@@ -1,5 +1,8 @@
 streamlit
 pandas
-matplotlib
-seaborn
+numpy
+plotly
 gdown
+scikit-learn
+scipy
+xlsxwriter
