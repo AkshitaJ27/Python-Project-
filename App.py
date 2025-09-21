@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import gdown
+import os
 
 # Set page configuration
 st.set_page_config(
@@ -11,10 +13,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Load the dataset
+# Load the dataset from Google Drive
 @st.cache_data
 def load_data():
-    df = pd.read_csv('marketing_campaign_dataset.csv', on_bad_lines='skip')
+    file_id = '1jsXiPf9PpGX2nMHIk12760qwQDOiCN10'
+    output = 'marketing_campaign_dataset.csv'
+    # Download the file if it doesn't exist
+    if not os.path.exists(output):
+        url = f'https://drive.google.com/uc?id={file_id}'
+        gdown.download(url, output, quiet=False)
+
+    df = pd.read_csv(output, on_bad_lines='skip')
     # Clean up column names
     df.columns = df.columns.str.strip()
     # Data cleaning and preprocessing
