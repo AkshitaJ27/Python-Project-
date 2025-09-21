@@ -27,12 +27,9 @@ def load_data():
 
     df = pd.read_csv(output, on_bad_lines='skip')
 
-    # --- MODIFICATION: Sample data to prevent app crashes ---
-    # If the dataframe has more than 50,000 rows, take a random sample.
-    # Using random_state ensures the sample is the same every time.
+    # Sample data to prevent app crashes if it's too large
     if len(df) > 50000:
         df = df.sample(n=50000, random_state=42)
-    # --- END MODIFICATION ---
 
     df.columns = df.columns.str.strip()
     # Safe conversions with checks
@@ -319,7 +316,10 @@ with tab3:
         rf = RandomForestRegressor(n_estimators=200, random_state=42)
         rf.fit(X, y)
         importances = pd.Series(rf.feature_importances_, index=features).sort_values(ascending=False)
-        fig_imp = px.bar(importances.reset_index().rename(columns={'index':'feature', 0:'importance'}), x='feature', y=0, title='Feature importance for ROI prediction')
+        
+        # --- THIS IS THE CORRECTED LINE ---
+        fig_imp = px.bar(importances.reset_index().rename(columns={'index':'feature', 0:'importance'}), x='feature', y='importance', title='Feature importance for ROI prediction')
+        
         st.plotly_chart(fig_imp, use_container_width=True)
         st.write("Top features:", importances.head(5).to_dict())
     else:
